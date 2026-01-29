@@ -86,7 +86,7 @@ jobs:
         if: ${{ !inputs.skip_maven }}
         uses: s4u/maven-settings-action@v4.0.0
         with:
-          servers: '[{"id": "tackle-testapp-public", "username": "${{ vars.KONVEYOR_BOT_ID }}", "password": "${{ steps.get_workflow_token.outputs.token }}"]'
+          servers: '[{"id": "tackle-testapp-public", "username": "${{ vars.KONVEYOR_BOT_ID }}", "password": "${{ steps.get_workflow_token.outputs.token }}"}]'
           path: "${{ runner.temp }}/settings.xml"
 
       - name: Create kantra config
