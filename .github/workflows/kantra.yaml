@@ -69,7 +69,7 @@ jobs:
           podman rm kantra-download
           cp kantra $HOME/.local/bin/kantra
           podman network inspect podman | jq -r '.[0].subnets.[0].gateway'
-          echo "NETWORK_GATEWAY=$(podman network inspect podman | jq -r '.[0].subnets.[0].gateway')" >> $GITHUB_ENV
+          echo "NETWORK_GATEWAY=host.cotainers.internal" >> $GITHUB_ENV
           
 
       - name: Checkout repo
@@ -100,7 +100,7 @@ jobs:
         uses: s4u/maven-settings-action@v4.0.0
         with:
           githubServer: false
-          repositories: '[{"id": "tackle-testapp-public", "name": "Local tackle-testapp repo", "url": "http://host.containers.internal:8085"}]'
+          repositories: '[{"id": "tackle-testapp-public", "name": "Local tackle-testapp repo", "url": "http://${{ env.NETWORK_GATEWAY }}:8085"}]'
           mirrors: '[{"id": "maven-default-http-blocker", "name": "disable http block", "mirrorOf": "tackle-testapp-public", "url": "http://${{ env.NETWORK_GATEWAY }}:8085", "blocked": false}]'
           path: "${{ runner.temp }}/settings.xml"
 

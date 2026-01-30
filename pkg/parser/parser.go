@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 
@@ -114,9 +115,18 @@ func normalizeIncident(incident konveyor.Incident, testDir string) (konveyor.Inc
 		LineNumber: incident.LineNumber,
 		Variables:  incident.Variables,
 	}
+	// For windows, we need to normailze to slash
 	fileName := string(incident.URI)
+	getFilePath := strings.TrimPrefix(fileName, "file://")
+	toSlashFilePaths := filepath.ToSlash(getFilePath)
+	if strings.HasPrefix(toSlashFilePaths, "//") {
+		toSlashFilePaths = strings.Replace(toSlashFilePaths, "//", "/", 1)
+	}
+	fileName = fmt.Sprintf("file://%s", toSlashFilePaths)
 	if testDir != "" {
-		fileName = strings.ReplaceAll(fileName, testDir, "")
+		normalizedTestDir := filepath.ToSlash(testDir)
+
+		fileName = strings.ReplaceAll(fileName, normalizedTestDir, "")
 	}
 
 	// Normalize Maven repository paths
