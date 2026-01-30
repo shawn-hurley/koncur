@@ -48,7 +48,8 @@ jobs:
           podman machine start 
           podman cp $(podman create --name kantra-download quay.io/konveyor/kantra:latest):/usr/local/bin/windows-kantra . &&\
           podman rm kantra-download
-          cp windows-kantra $HOME/.local/bin/kantra
+          cp windows-kantra $HOME/.local/bin/kantra.exe
+          ls -la $HOME/.local/bin/
 
       - name: Download and install kantra (linux)
         if: ${{ inputs.os == 'ubuntu-24.04-arm' }}
@@ -80,6 +81,7 @@ jobs:
         with:
           application_id: ${{ inputs.bot_id }}
           application_private_key: ${{ secrets.KONVEYOR_BOT_KEY }}
+          organization: konveyor
           permissions: "packages:read"
           revoke_token: true
 
