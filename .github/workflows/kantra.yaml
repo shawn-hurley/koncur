@@ -65,7 +65,7 @@ jobs:
           podman cp $(podman create --name kantra-download quay.io/konveyor/kantra:latest):/usr/local/bin/kantra . &&\
           podman rm kantra-download
           cp kantra $HOME/.local/bin/kantra
-          podman network inspect podman_default
+          podman network inspect podman
           
 
       - name: Checkout repo
@@ -95,6 +95,7 @@ jobs:
         if: ${{ !inputs.skip_maven }}
         uses: s4u/maven-settings-action@v4.0.0
         with:
+          githubServer: false
           repositories: '[{"id": "tackle-testapp-public", "name": "Local tackle-testapp repo", "url": "http://host.containers.internal:8085"}]'
           mirrors: '[{"id": "maven-default-http-blocker", "name": "disable http block", "mirrorOf": "tackle-testapp-public", "url": "http://host.containers.internal:8085", "blocked": false}]'
           path: "${{ runner.temp }}/settings.xml"
