@@ -65,6 +65,8 @@ jobs:
           podman cp $(podman create --name kantra-download quay.io/konveyor/kantra:latest):/usr/local/bin/kantra . &&\
           podman rm kantra-download
           cp kantra $HOME/.local/bin/kantra
+          podman network inspect podman_default
+          
 
       - name: Checkout repo
         uses: actions/checkout@v6
