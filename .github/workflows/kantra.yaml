@@ -38,6 +38,7 @@ jobs:
           podman cp $(podman create --name kantra-download quay.io/konveyor/kantra:latest):/usr/local/bin/darwin-kantra . &&\
           podman rm kantra-download
           cp darwin-kantra $HOME/.local/bin/kantra
+          echo "NETWORK_GATEWAY=host.containers.internal" >> $GITHUB_ENV
 
       - name: Download and install kantra (windows)
         if: ${{ inputs.os == 'windows-latest' }}
@@ -50,6 +51,8 @@ jobs:
           podman rm kantra-download
           cp windows-kantra $HOME/.local/bin/kantra.exe
           ls -la $HOME/.local/bin/kantra.exe
+          echo "NETWORK_GATEWAY=host.containers.internal" >> $GITHUB_ENV
+
 
       - name: Also add local/bin to windows path
         if: ${{ inputs.os == 'windows-latest' }}
@@ -65,7 +68,8 @@ jobs:
           podman cp $(podman create --name kantra-download quay.io/konveyor/kantra:latest):/usr/local/bin/kantra . &&\
           podman rm kantra-download
           cp kantra $HOME/.local/bin/kantra
-          podman network inspect podman
+          podman network inspect podman | jq -r '.[0].subnets.[0].gateway'
+          echo "NETWORK_GATEWAY=$(podman network inspect podman | jq -r '.[0].subnets.[0].gateway') >> $GITHUB_ENV
           
 
       - name: Checkout repo
@@ -97,7 +101,7 @@ jobs:
         with:
           githubServer: false
           repositories: '[{"id": "tackle-testapp-public", "name": "Local tackle-testapp repo", "url": "http://host.containers.internal:8085"}]'
-          mirrors: '[{"id": "maven-default-http-blocker", "name": "disable http block", "mirrorOf": "tackle-testapp-public", "url": "http://host.containers.internal:8085", "blocked": false}]'
+          mirrors: '[{"id": "maven-default-http-blocker", "name": "disable http block", "mirrorOf": "tackle-testapp-public", "url": "http://${{ env.NETWORK_GATEWAY }}:8085", "blocked": false}]'
           path: "${{ runner.temp }}/settings.xml"
 
       # Saving for if I need later:
@@ -119,7 +123,6 @@ jobs:
           SKIP_MAVEN: ${{ fromJSON(inputs.skip_maven) }}
         run: |
           echo "$PATH"
-          cmd //c 'echo %PATH%'
           koncur run tests -t kantra -o yaml --output-file test.yaml
 
 
