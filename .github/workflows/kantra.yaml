@@ -99,7 +99,7 @@ jobs:
       - name: Test pulling artifact from mvn repo
         if: ${{ !inputs.skip_maven }}
         run: |
-          mvn -X -s ${{ runner.temp }} dependency:get -Dartifact=io.konveyor.demo:config-utils:1.0.0:jar
+          mvn -X -s ${{ runner.temp }}/settings.xml dependency:get -Dartifact=io.konveyor.demo:config-utils:1.0.0:jar
 
       # Saving for if I need later:
       # binaryPath: "$HOME/.local/bin/kantra"
