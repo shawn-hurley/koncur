@@ -48,8 +48,8 @@ jobs:
           podman machine start 
           podman cp $(podman create --name kantra-download quay.io/konveyor/kantra:latest):/usr/local/bin/windows-kantra . &&\
           podman rm kantra-download
-          cp windows-kantra $HOME/.local/bin/kantra.exe
-          ls -la $HOME/.local/bin/
+          cp windows-kantra $HOME/usr/bin/kantra.exe
+          ls -la $HOME/usr/bin/
 
       - name: Download and install kantra (linux)
         if: ${{ inputs.os == 'ubuntu-24.04-arm' }}
@@ -92,6 +92,8 @@ jobs:
           servers: '[{"id": "tackle-testapp-public", "username": "${{ vars.KONVEYOR_BOT_ID }}", "password": "${{ steps.get_workflow_token.outputs.token }}"}]'
           path: "${{ runner.temp }}/settings.xml"
 
+      # Saving for if I need later:
+      # binaryPath: "$HOME/.local/bin/kantra"
       - name: Create kantra config
         if: ${{ !inputs.skip_maven }}
         shell: bash
@@ -100,7 +102,6 @@ jobs:
           cat <<-EOF > .koncur/config/target-kantra.yaml
           type: kantra
           kantra:
-            binaryPath: "$HOME/.local/bin/kantra"
             mavenSettings: "${{ runner.temp }}/settings.xml"
           EOF
       
