@@ -94,6 +94,7 @@ jobs:
         uses: s4u/maven-settings-action@v4.0.0
         with:
           repositories: '[{"id": "tackle-testapp-public", "name": "Local tackle-testapp repo", "url": "http://host.containers.internal:8085"}]'
+          mirrors: '[{"id": "maven-default-http-blocker", "mirrorOf": "tackle-testapp-public", "url": "http://host.containers.internal:8085", "blocked": false}]'
           path: "${{ runner.temp }}/settings.xml"
 
       - name: Test pulling artifact from mvn repo
