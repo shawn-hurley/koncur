@@ -98,6 +98,7 @@ jobs:
           cat <<-EOF > .koncur/config/target-kantra.yaml
           type: kantra
           kantra:
+          \tbinaryPath: "$HOME/.local/bin/kantra"
           \tmavenSettings: "${{ runner.temp }}/settings.xml"
           EOF
       
