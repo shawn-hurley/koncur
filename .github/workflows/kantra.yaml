@@ -48,8 +48,15 @@ jobs:
           podman machine start 
           podman cp $(podman create --name kantra-download quay.io/konveyor/kantra:latest):/usr/local/bin/windows-kantra . &&\
           podman rm kantra-download
-          cp windows-kantra $HOME/bin/kantra.exe
-          ls -la $HOME/usr/bin/
+          cp windows-kantra $HOME/.local/bin/kantra.exe
+          ls -la $HOME/.local/bin/kantra.exe
+
+      - name: Also add local/bin to windows path
+        if: ${{ inputs.os == 'windows-latest' }}
+        shell: powershell
+        run: |
+          $newPath = "$HOME\.local\bin"
+          Write-Output "$newPath" >> $env:GITHUB_PATH
 
       - name: Download and install kantra (linux)
         if: ${{ inputs.os == 'ubuntu-24.04-arm' }}
@@ -89,6 +96,11 @@ jobs:
           repositories: '[{"id": "tackle-testapp-public", "name": "Local tackle-testapp repo", "url": "http://host.containers.internal:8085"}]'
           path: "${{ runner.temp }}/settings.xml"
 
+      - name: Test pulling artifact from mvn repo
+        if: ${{ !inputs.skip_maven }}
+        run: |
+          mvn -X -s ${{ runner.temp }} dependency:get -Dartifact=io.konveyor.demo:config-utils:1.0.0:jar
+
       # Saving for if I need later:
       # binaryPath: "$HOME/.local/bin/kantra"
       - name: Create kantra config
@@ -108,6 +120,7 @@ jobs:
           SKIP_MAVEN: ${{ fromJSON(inputs.skip_maven) }}
         run: |
           echo "$PATH"
+          cmd //c 'echo %PATH%'
           koncur run tests -t kantra -o yaml --output-file test.yaml
 
 
