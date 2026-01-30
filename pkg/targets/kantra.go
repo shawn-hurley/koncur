@@ -16,8 +16,8 @@ import (
 
 // KantraTarget implements Target for Kantra
 type KantraTarget struct {
-	binaryPath    string
-	mavenSettings string
+	binaryPath    string `yaml:"binaryPath"`
+	mavenSettings string `yaml:"mavenSettings"`
 }
 
 // NewKantraTarget creates a new Kantra target
