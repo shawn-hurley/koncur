@@ -100,11 +100,6 @@ jobs:
           mirrors: '[{"id": "maven-default-http-blocker", "name": "disable http block", "mirrorOf": "tackle-testapp-public", "url": "http://host.containers.internal:8085", "blocked": false}]'
           path: "${{ runner.temp }}/settings.xml"
 
-      - name: Test pulling artifact from mvn repo
-        if: ${{ !inputs.skip_maven }}
-        run: |
-          mvn -X -s ${{ runner.temp }}/settings.xml dependency:get -Dartifact=io.konveyor.demo:config-utils:1.0.0:jar
-
       # Saving for if I need later:
       # binaryPath: "$HOME/.local/bin/kantra"
       - name: Create kantra config
