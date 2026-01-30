@@ -48,7 +48,7 @@ jobs:
           podman machine start 
           podman cp $(podman create --name kantra-download quay.io/konveyor/kantra:latest):/usr/local/bin/windows-kantra . &&\
           podman rm kantra-download
-          cp windows-kantra $HOME/usr/bin/kantra.exe
+          cp windows-kantra $HOME/bin/kantra.exe
           ls -la $HOME/usr/bin/
 
       - name: Download and install kantra (linux)
@@ -86,7 +86,7 @@ jobs:
         if: ${{ !inputs.skip_maven }}
         uses: s4u/maven-settings-action@v4.0.0
         with:
-          repositories: '[{"id": "tackle-testapp-public", "name": "Local tackle-testapp repo", "url": "http://localhost:8085"}]'
+          repositories: '[{"id": "tackle-testapp-public", "name": "Local tackle-testapp repo", "url": "http://host.containers.internal:8085"}]'
           path: "${{ runner.temp }}/settings.xml"
 
       # Saving for if I need later:
