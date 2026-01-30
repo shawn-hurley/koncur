@@ -69,7 +69,7 @@ jobs:
           podman rm kantra-download
           cp kantra $HOME/.local/bin/kantra
           podman network inspect podman | jq -r '.[0].subnets.[0].gateway'
-          echo "NETWORK_GATEWAY=$(podman network inspect podman | jq -r '.[0].subnets.[0].gateway') >> $GITHUB_ENV
+          echo "NETWORK_GATEWAY=$(podman network inspect podman | jq -r '.[0].subnets.[0].gateway')" >> $GITHUB_ENV
           
 
       - name: Checkout repo
