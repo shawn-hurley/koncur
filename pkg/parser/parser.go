@@ -120,7 +120,11 @@ func normalizeIncident(incident konveyor.Incident, testDir string) (konveyor.Inc
 	getFilePath := strings.TrimPrefix(fileName, "file://")
 	toSlashFilePaths := filepath.ToSlash(getFilePath)
 	if strings.HasPrefix(toSlashFilePaths, "//") {
+		fmt.Printf("\n\nHEREHERHE -- toSlashFilePaths: %v", toSlashFilePaths)
 		toSlashFilePaths = strings.Replace(toSlashFilePaths, "//", "/", 1)
+		fmt.Printf("\n\nHEREHERHE -- toSlashFilePaths: %v", toSlashFilePaths)
+		toSlashFilePaths = fmt.Sprintf("/%s", strings.TrimLeft(toSlashFilePaths, "/"))
+		fmt.Printf("\n\nHEREHERHE -- toSlashFilePaths: %v", toSlashFilePaths)
 	}
 	fileName = fmt.Sprintf("file://%s", toSlashFilePaths)
 	if testDir != "" {
